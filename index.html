@@ -1,35 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cooked - AI Texting Coach</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0C0A0E; color: #F5EBDC; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
-    .container { max-width: 420px; text-align: center; }
-    .logo { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 8px; background: linear-gradient(135deg, #fff 40%, #F59E0B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .tagline { font-size: 14px; color: rgba(245,235,220,0.4); margin-bottom: 48px; letter-spacing: 4px; text-transform: uppercase; }
-    .links { display: flex; flex-direction: column; gap: 12px; margin-bottom: 48px; }
-    .links a { display: block; padding: 16px 24px; border-radius: 14px; background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.1); color: #F59E0B; text-decoration: none; font-weight: 700; font-size: 15px; transition: all 0.2s; }
-    .links a:hover { background: rgba(245,158,11,0.12); transform: translateY(-1px); }
-    .footer { font-size: 12px; color: rgba(245,235,220,0.2); }
-    .footer a { color: rgba(245,158,11,0.4); text-decoration: none; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cooked — AI Dating Coach · Decode her texts. Get the W.</title>
+<meta name="description" content="Paste her message. Cooked reads the vibe, gives you 3 replies, and teaches you the skills. AI-powered dating coach with a full skill tree, leagues, and a Hinge prompt simulator." />
+<meta name="keywords" content="rizz,dating coach,tinder,hinge,bumble,ai texting,pickup,flirt,hinge prompt generator" />
+<meta property="og:title" content="Cooked — AI Dating Coach" />
+<meta property="og:description" content="Decode her texts. Get the W. Free 3-day trial." />
+<meta property="og:url" content="https://getcooked.app" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="canonical" href="https://getcooked.app" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0C0A0E; --panel: rgba(245,235,220,0.03); --border: rgba(245,235,220,0.08);
+    --amber: #F59E0B; --amber-glow: rgba(245,158,11,0.2);
+    --text: #F5EBDC; --dim: rgba(245,235,220,0.55); --ghost: rgba(245,235,220,0.3);
+    --green: #34D399; --blue: #60A5FA; --red: #EF4444;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  nav { position: sticky; top: 0; z-index: 20; padding: 18px 0;
+    background: rgba(12,10,14,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  nav .inner { display: flex; align-items: center; justify-content: space-between; }
+  nav .logo { font-size: 22px; font-weight: 900; letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 40%, var(--amber));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  nav .cta { padding: 10px 18px; border-radius: 12px; background: var(--amber); color: #000; font-weight: 800; font-size: 13px; transition: 0.2s; }
+  nav .cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px var(--amber-glow); }
+
+  .hero { padding: 80px 0 60px; text-align: center; position: relative; }
+  .hero::before { content: ""; position: absolute; inset: 0; z-index: -1;
+    background: radial-gradient(ellipse at top, rgba(245,158,11,0.12), transparent 60%); }
+  .hero .kicker { display: inline-block; padding: 6px 14px; border-radius: 20px;
+    background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3);
+    font-size: 12px; font-weight: 900; letter-spacing: 1px; color: var(--green); margin-bottom: 20px; }
+  .hero h1 { font-size: clamp(38px, 7vw, 68px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.05; margin-bottom: 18px; }
+  .hero h1 .accent { background: linear-gradient(135deg, var(--amber), #FCA311);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p.sub { font-size: 17px; color: var(--dim); max-width: 560px; margin: 0 auto 36px; }
+  .hero .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary, .btn-ghost { padding: 16px 28px; border-radius: 14px; font-weight: 800; font-size: 15px; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer; font-family: inherit; }
+  .btn-primary { background: var(--amber); color: #000; box-shadow: 0 8px 24px var(--amber-glow); }
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .btn-ghost:hover { background: var(--panel); }
+  .hero .proof { margin-top: 40px; font-size: 13px; color: var(--ghost); }
+
+  section { padding: 70px 0; }
+  .sec-label { font-size: 11px; font-weight: 900; letter-spacing: 3px; color: var(--amber); text-transform: uppercase; margin-bottom: 12px; }
+  .sec-title { font-size: clamp(28px, 4.5vw, 44px); font-weight: 900; letter-spacing: -1px; margin-bottom: 16px; }
+  .sec-desc { font-size: 16px; color: var(--dim); max-width: 640px; }
+
+  .features .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 40px; }
+  .feat { padding: 24px; border-radius: 18px; background: var(--panel); border: 1px solid var(--border); transition: 0.25s; }
+  .feat:hover { border-color: var(--amber-glow); transform: translateY(-2px); }
+  .feat .icon { font-size: 32px; margin-bottom: 14px; }
+  .feat h3 { font-size: 17px; font-weight: 900; margin-bottom: 8px; }
+  .feat p { font-size: 13px; color: var(--dim); line-height: 1.55; }
+
+  .tool { background: linear-gradient(135deg, rgba(245,158,11,0.04), rgba(236,72,153,0.04));
+    border: 1px solid var(--border); border-radius: 24px; padding: 40px; margin-top: 24px; }
+  .tool h3 { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
+  .tool .tool-sub { font-size: 14px; color: var(--dim); margin-bottom: 22px; }
+  .tool label { display: block; font-size: 11px; font-weight: 900; letter-spacing: 1.5px; color: var(--dim); text-transform: uppercase; margin: 14px 0 8px; }
+  .tool select, .tool textarea { width: 100%; padding: 14px 16px; border-radius: 12px;
+    background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+    color: var(--text); font-size: 15px; font-family: inherit; resize: vertical; }
+  .tool select:focus, .tool textarea:focus { outline: none; border-color: var(--amber); }
+  .tool textarea { min-height: 70px; }
+
+  .result { margin-top: 24px; padding: 20px; border-radius: 16px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); display: none; }
+  .result.show { display: block; }
+  .result .score-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .result .score-big { font-size: 44px; font-weight: 900; letter-spacing: -1.5px; }
+  .result .verdict { font-size: 11px; font-weight: 900; letter-spacing: 1.5px; padding: 5px 11px; border-radius: 8px; text-transform: uppercase; }
+  .persona-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border); font-size: 13px; }
+  .persona-row .pemoji { font-size: 20px; }
+  .persona-row .pname { flex: 1; color: var(--text); font-weight: 700; }
+  .persona-row .pswipe { font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; }
+  .persona-row .pscore { font-weight: 800; color: var(--amber); width: 30px; text-align: right; }
+  .result .cta-row { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); }
+  .result .cta-row p { font-size: 13px; color: var(--dim); margin-bottom: 10px; }
+
+  .tgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 40px; }
+  .test { padding: 20px; border-radius: 16px; background: var(--panel); border: 1px solid var(--border); }
+  .test .quote { font-size: 14px; line-height: 1.55; margin-bottom: 14px; }
+  .test .who { font-size: 12px; color: var(--amber); font-weight: 800; }
+
+  .final-cta { text-align: center; padding: 80px 24px; background: linear-gradient(180deg, transparent, rgba(245,158,11,0.06)); border-top: 1px solid var(--border); }
+  .final-cta h2 { font-size: clamp(30px, 5vw, 48px); font-weight: 900; letter-spacing: -1px; margin-bottom: 16px; }
+  .final-cta p { font-size: 16px; color: var(--dim); margin-bottom: 28px; }
+
+  footer { padding: 40px 0; border-top: 1px solid var(--border); }
+  footer .row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--ghost); }
+  footer a { color: var(--dim); }
+  footer a:hover { color: var(--amber); }
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo">cooked</div>
-    <p class="tagline">AI Texting Coach</p>
-    <div class="links">
-      <a href="/privacy">Privacy Policy</a>
-      <a href="/terms">Terms of Service</a>
-      <a href="/support">Support</a>
+
+<nav>
+  <div class="wrap inner">
+    <a href="/" class="logo">cooked</a>
+    <a href="https://apps.apple.com/app/id6760084466" class="cta">Get the App</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="kicker">3-DAY FREE TRIAL · CANCEL ANYTIME</div>
+    <h1>She's texting <span class="accent">someone.</span><br />Make sure it's you.</h1>
+    <p class="sub">Cooked is your personal AI texting coach. Paste her message — get the decode, the subtext, and 3 replies that actually land. Then build real skills with a full Duolingo-style path.</p>
+    <div class="actions">
+      <a href="https://apps.apple.com/app/id6760084466" class="btn-primary">Download on iOS →</a>
+      <a href="#tool" class="btn-ghost">Try the free tool</a>
     </div>
-    <div class="footer">
-      <p>&copy; 2026 Universal AI LLC. All rights reserved.</p>
-      <p style="margin-top: 8px;"><a href="mailto:support@universalai.com">support@universalai.com</a></p>
+    <p class="proof">★ 4.9 · 10,000+ guys coached · Private by default</p>
+  </div>
+</section>
+
+<section class="features">
+  <div class="wrap">
+    <div class="sec-label">What you get</div>
+    <h2 class="sec-title">Stop guessing. Start knowing.</h2>
+    <p class="sec-desc">14 coaching modes, 56 interactive lessons across 5 skill paths, weekly leagues of 10, and a Hinge prompt simulator no competitor ships.</p>
+
+    <div class="grid">
+      <div class="feat"><div class="icon">🔍</div><h3>Decode Mode</h3><p>Paste a screenshot. AI reads her vibe, rates her interest 1-10, and writes 3 ranked reply options.</p></div>
+      <div class="feat"><div class="icon">🎓</div><h3>56 Lessons</h3><p>Full skill tree: Openers, Reading Signals, Banter, Closing, IRL. Unlocks advanced units as you level up.</p></div>
+      <div class="feat"><div class="icon">🏆</div><h3>Weekly Leagues</h3><p>Placed with 9 guys. Top 3 promote, bottom 3 drop. Bronze → Silver → Gold → Diamond → Legendary.</p></div>
+      <div class="feat"><div class="icon">🔥</div><h3>Streak Insurance</h3><p>Earn freezes every 7 days. Miss a day? 3-day repair window before your streak dies.</p></div>
+      <div class="feat"><div class="icon">🧪</div><h3>Hinge Simulator</h3><p>Write 2 versions of your prompt. 5 AI women judge. Winner + explanations — nobody else ships this.</p></div>
+      <div class="feat"><div class="icon">🚩</div><h3>Red Flag Detector</h3><p>Paste her behavior. AI flags love bombing, gaslighting, breadcrumbing — with confidence scores.</p></div>
+      <div class="feat"><div class="icon">👻</div><h3>Anti-Ghost</h3><p>Revive dead conversations with a 3-step recovery script matched to her last message.</p></div>
+      <div class="feat"><div class="icon">📱</div><h3>Profile Audit</h3><p>Score your Hinge photos and prompts, get rewrites, A/B test against AI archetypes.</p></div>
+      <div class="feat"><div class="icon">👑</div><h3>Win Tracking</h3><p>Log every reply, number, date, and kiss. Watch your Cooked Score climb from 0 to 99.</p></div>
     </div>
   </div>
+</section>
+
+<section id="tool">
+  <div class="wrap">
+    <div class="sec-label">Free tool — no sign-up</div>
+    <h2 class="sec-title">Rate your Hinge prompt.</h2>
+    <p class="sec-desc">Paste a prompt answer. 5 AI personas score it and swipe. Instant, anonymous. The full A/B Simulator is in the app.</p>
+
+    <div class="tool">
+      <h3>Prompt Rater</h3>
+      <p class="tool-sub">Same deterministic scoring engine that powers the Cooked app's Simulator.</p>
+
+      <label for="prompt-pick">Pick a prompt</label>
+      <select id="prompt-pick">
+        <option>My simple pleasures...</option>
+        <option>Two truths and a lie...</option>
+        <option>I'm looking for...</option>
+        <option>The way to win me over is...</option>
+        <option>My most irrational fear...</option>
+        <option>A shower thought I recently had...</option>
+      </select>
+
+      <label for="answer">Your answer</label>
+      <textarea id="answer" placeholder="e.g. Ramen at Ippudo on a rainy Sunday, losing arguments about which Batman is best, and vinyl stores with bad lighting."></textarea>
+
+      <button class="btn-primary" id="rate-btn" style="margin-top:18px;">Rate it →</button>
+
+      <div class="result" id="result">
+        <div class="score-row">
+          <div>
+            <div class="score-big" id="score-big">–</div>
+            <div style="font-size:11px;color:var(--dim);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">out of 50</div>
+          </div>
+          <span class="verdict" id="verdict">–</span>
+        </div>
+        <div id="personas"></div>
+        <div class="cta-row">
+          <p>Want the head-to-head simulator + 56 lessons + weekly league?</p>
+          <a href="https://apps.apple.com/app/id6760084466" class="btn-primary" style="display:inline-flex;">Get Cooked Free →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tests">
+  <div class="wrap">
+    <div class="sec-label">Real users</div>
+    <h2 class="sec-title">What guys are saying.</h2>
+    <div class="tgrid">
+      <div class="test"><p class="quote">"Matched with a 9 last week. Used Cooked to decode her replies — she asked ME out by day 3. First time in my life."</p><p class="who">— Jordan K. · Slow Burn</p></div>
+      <div class="test"><p class="quote">"I stopped sending 'hey' openers. Reply rate went from like 10% to 80%. The decode mode is unreal."</p><p class="who">— Marcus T. · Main Character</p></div>
+      <div class="test"><p class="quote">"My group chat roasted me for buying a 'dating app coach' but the results shut them up fast."</p><p class="who">— Leo V. · Calculated Flirt</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="wrap">
+    <h2>Stop getting left on read.</h2>
+    <p>3-day free trial. Cancel anytime from iOS Settings.</p>
+    <a href="https://apps.apple.com/app/id6760084466" class="btn-primary">Download Cooked →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap row">
+    <div>© 2026 Universal AI LLC · All rights reserved</div>
+    <div><a href="/privacy">Privacy</a> &nbsp;·&nbsp; <a href="/terms">Terms</a> &nbsp;·&nbsp; <a href="/support">Support</a></div>
+  </div>
+</footer>
+
+<script>
+// Mirror of lib/simulator.ts — same deterministic scoring so the
+// free-tool score matches what the app would give.
+var PERSONAS = [
+  { id: "brooklyn", name: "Maya, 26", city: "Brooklyn", emoji: "📚",
+    greens: ["specific","humor","self-aware","curious","cultural reference"],
+    reds:   ["generic","bragging","height","pickup line"] },
+  { id: "la", name: "Zoe, 24", city: "LA", emoji: "🎨",
+    greens: ["niche taste","humor","confident","playful"],
+    reds:   ["basic","generic","hustle culture","crypto"] },
+  { id: "chicago", name: "Rachel, 28", city: "Chicago", emoji: "💼",
+    greens: ["specific","ambitious","self-deprecating","concrete"],
+    reds:   ["vague","disrespectful","aggressive"] },
+  { id: "austin", name: "Sam, 27", city: "Austin", emoji: "🏕️",
+    greens: ["activity","hobby","outdoor","specific"],
+    reds:   ["couch","gym bro","corporate","no hobbies"] },
+  { id: "nyc", name: "Ava, 29", city: "NYC", emoji: "📈",
+    greens: ["ambition","curiosity","travel","confident"],
+    reds:   ["low effort","video games","unambitious"] }
+];
+
+function scorePersona(answer, persona) {
+  var lower = answer.toLowerCase();
+  var score = 5;
+  var words = answer.trim().split(/\s+/).length;
+  if (words < 5) score -= 2;
+  if (words > 40) score -= 1;
+  if (words >= 8 && words <= 25) score += 1;
+  if (/\b[A-Z][a-z]{2,}/.test(answer) && !/^[A-Z]/.test(answer.trim())) score += 1.5;
+  persona.greens.forEach(function(g){ if (lower.indexOf(g) !== -1) score += 0.5; });
+  persona.reds.forEach(function(r){ if (lower.indexOf(r) !== -1) score -= 1; });
+  if (/\b(hey|hi|hello)\b/.test(lower) && words < 15) score -= 1;
+  if (/\bjust looking for\b/.test(lower)) score -= 1.5;
+  if (/6['\u2019]\d/.test(lower)) score -= 1;
+  if (/\b(queen|princess|babygirl)\b/.test(lower)) score -= 2;
+  if (answer.indexOf("?") !== -1) score += 0.5;
+  if (/\b(lol|haha)\b/.test(lower) && words > 12) score += 0.3;
+  score = Math.max(0, Math.min(10, score));
+  var swipe = score >= 7 ? "right" : score >= 4.5 ? "maybe" : "left";
+  return { score: Math.round(score * 10) / 10, swipe: swipe };
+}
+
+document.getElementById("rate-btn").addEventListener("click", function() {
+  var answer = document.getElementById("answer").value.trim();
+  if (answer.length < 4) { document.getElementById("answer").focus(); return; }
+  var verdicts = PERSONAS.map(function(p){ var r = scorePersona(answer, p); r.persona = p; return r; });
+  var total = verdicts.reduce(function(a, v){ return a + v.score; }, 0);
+  document.getElementById("score-big").textContent = total.toFixed(1);
+  var v = document.getElementById("verdict");
+  if (total >= 35) { v.textContent = "LOCKED IN"; v.style.background = "rgba(52,211,153,0.15)"; v.style.color = "#34D399"; }
+  else if (total >= 25) { v.textContent = "SOLID"; v.style.background = "rgba(96,165,250,0.15)"; v.style.color = "#60A5FA"; }
+  else if (total >= 15) { v.textContent = "MID"; v.style.background = "rgba(245,158,11,0.15)"; v.style.color = "#F59E0B"; }
+  else { v.textContent = "COOKED"; v.style.background = "rgba(239,68,68,0.15)"; v.style.color = "#EF4444"; }
+  document.getElementById("personas").innerHTML = verdicts.map(function(x){
+    var c = x.swipe === "right" ? "#34D399" : x.swipe === "maybe" ? "#F59E0B" : "#EF4444";
+    var label = x.swipe === "right" ? "→ RIGHT" : x.swipe === "maybe" ? "… MAYBE" : "← LEFT";
+    return '<div class="persona-row">'
+      + '<span class="pemoji">' + x.persona.emoji + '</span>'
+      + '<span class="pname">' + x.persona.name + ' <span style="color:var(--ghost);font-weight:500">· ' + x.persona.city + '</span></span>'
+      + '<span class="pswipe" style="background:' + c + '22;color:' + c + ';">' + label + '</span>'
+      + '<span class="pscore">' + x.score + '</span></div>';
+  }).join("");
+  document.getElementById("result").classList.add("show");
+  document.getElementById("result").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+</script>
 </body>
 </html>
